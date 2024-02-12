@@ -1,4 +1,5 @@
 import os.path
+import sys
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -9,33 +10,25 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-SPREADSHEET_ID = "1rnYyBf3xr2Y8NCDSPtEJFGWfHBRcup00bumLbctTfkA"
-
 def main():
-    credentials = None
-    if os.path.exists("token.json"):
-        credentials = Credentials.from_authorized_user_file("token.json", SCOPES)
-    if not credentials or not credentials.valid:
-        if credentials and credentials.expired and credentials.refresh_token:
-            credentials.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-            credentials = flow.run_local_server(port=0)
-        with open("token.json", "w") as token:
-            token.write(credentials.to_json())
-    try:
-        service = build("sheets", "v4", credentials=credentials)
-        sheets = service.spreadsheets()
+    creds = None
+    if os.path.exists('token.json'):
+        flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+        creds = flow.run_local_server(port=0)
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
+        return Credentials.from_authorized_user_file('token.json', SCOPES)
+    else:
+        print('Credentials not present')
+        sys.exit(1)
 
-        result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range="Sheet1!B2:C20").execute()
+def get_creds():
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        if creds and creds.expired and creds.refresh_token:
+            creds.referesh(Request())
+        return creds
+    return main()
 
-        values = result.get("values", [])
 
-        for row in values: 
-            print(row)
-    except HttpError as error:
-        print(error)
-
-if __name__ == "__main__":
-    main()
     
