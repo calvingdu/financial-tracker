@@ -4,7 +4,7 @@ from googleapiclient.errors import HttpError
 
 SPREADSHEET_ID = "1rnYyBf3xr2Y8NCDSPtEJFGWfHBRcup00bumLbctTfkA"
 
-def get_values(SPREADSHEET_ID, range_name):
+def get_values(SPREADSHEET_ID):
 
     try: 
         creds = credential_handler.get_creds()
@@ -15,7 +15,7 @@ def get_values(SPREADSHEET_ID, range_name):
         
         values = result.get("values", [])
 
-        for row in values: 
+        for row in values:
             print(row)
     except HttpError as error:
         print(error)

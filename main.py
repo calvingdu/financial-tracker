@@ -10,8 +10,8 @@ app = FastAPI()
 credential_handler.get_creds()
 
 @app.get("/grab")
-async def grab():
-    return get.get_values()
+async def grab(SPREADSHEET_ID: str):
+    return get.get_values(SPREADSHEET_ID)
 
 
 
