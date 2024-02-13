@@ -26,7 +26,7 @@ def get_creds():
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
         if creds and creds.expired and creds.refresh_token:
-            creds.referesh(Request())
+            creds.refresh(Request())
         return creds
     return main()
 

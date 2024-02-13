@@ -15,5 +15,6 @@ async def grab(SPREADSHEET_ID: str):
     return get.get_values(SPREADSHEET_ID)
 
 @app.get("/update")
-async def update(SPREADSHEET_ID: str, ):
-    return update.update_values()
+async def changeValues(SPREADSHEET_ID: str):
+    return update.update_values(SPREADSHEET_ID)
+
