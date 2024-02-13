@@ -13,8 +13,3 @@ credential_handler.get_creds()
 async def grab(SPREADSHEET_ID: str):
     return get.get_values(SPREADSHEET_ID)
 
-
-
-
-
-
