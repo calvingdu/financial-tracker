@@ -1,6 +1,7 @@
 import imaplib
 import email
 import yaml
+import re
 
 with open("email_credentials.yml") as f:
     content = f.read()
@@ -32,11 +33,23 @@ for mail_id in alt_mail_ids:
     t, data = my_mail.fetch(mail_id, message_content_id)
     email_response.append(data)
 
+
 for msg in email_response:
     for body in msg: 
         if type(body) is tuple:
             my_msg = email.message_from_bytes((body[1]))
+            match = re.findall(r'\d{1,2} [A-Za-z]{3,4} \d{4}', my_msg.get('Date'))
+            print(match)
             for part in my_msg.walk():
-                print(part.get_content_type())
                 if part.get_content_type() == 'text/html':
-                    print(part.get_payload())
+                    # print(part.get_payload())
+                    store_and_dollar_info = re.findall(r'<\s*span style=3D[^>]*>(.*?)<\s*/\s*span>', part.get_payload())
+                    # dollar_amount = re.search(r'-(.*)\$\d{1,2}\.\d{2}', part.get_payload())
+                    # print(dollar_amount)
+                    store_letters = re.findall(r'[A-Za-z]',store_and_dollar_info[2])
+                    connected_store_letters = ''.join(store_letters)
+                    print(connected_store_letters)
+                    print(store_and_dollar_info[1:2])
+                
+
+                
