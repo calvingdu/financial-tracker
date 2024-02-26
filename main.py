@@ -15,10 +15,21 @@ def get_expense():
 
 @app.get("/get-expense-by-type")
 def get_expense_by_type(type: str):
-    return get_expenses.get_values()
+    valid_expense = []
+    # all_expenses = get_expenses.get_values()
+    all_expenses = [['01-Feb', 'Insurance', '-$100.00', 'Vehicle'], 
+                    ['01-Feb', 'McDonalds', '-$100.00', 'Meal'], 
+                    ['Feb20', 'MCDONALDS', '$7.34', 'meal']]
+    
+    if len(all_expenses) > 1:
+        for external in all_expenses:
+            if (external[3].lower()) == type.lower():
+                valid_expense.append(external)
+    print(valid_expense)
+    return valid_expense
 
 @app.post("/create-expense")
 def create_new_expense(expense_type: str):
-    expense = gmail_reader.fetch_email_data().append(expense_type)
+    expense = gmail_reader.fetch_email_data().append(expense_type.lower())
     return create_expense.create_expenses(expense)
 
