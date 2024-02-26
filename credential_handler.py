@@ -13,7 +13,7 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 def main():
     creds = None
     if os.path.exists('token.json'):
-        flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+        flow = InstalledAppFlow.from_client_secrets_file("token.json", SCOPES)
         creds = flow.run_local_server(port=0)
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
@@ -28,7 +28,9 @@ def get_creds():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         return creds
-    return main()
+    
+if __name__ == "__main__":
+    main()
 
 
     
