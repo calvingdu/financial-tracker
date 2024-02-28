@@ -29,8 +29,6 @@ def get_creds():
             creds.refresh(Request())
         return creds
     
-if __name__ == "__main__":
-    main()
 
 
     

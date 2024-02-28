@@ -22,8 +22,6 @@ def fetch_email_data():
 
     typ, message_numbers_list = my_mail.search(None, key, value)
         
-    # mail_id_list = data[1]
-    # print(mail_id_list[0][0])
     mail_ids = message_numbers_list[0].decode("utf-8").split()
 
     alt_mail_ids = [mail_ids[-1]]
