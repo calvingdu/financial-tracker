@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
 import credential_handler
 import get_expenses
 import create_expense
@@ -18,10 +18,10 @@ def get_expense():
 def get_expense_by_type(type: str):
     valid_expense = []
     all_expenses = get_expenses.get_values()
-    # all_expenses = [['01-Feb', 'Insurance', '-$100.00', 'Vehicle'], 
-    #                 ['01-Feb', 'McDonalds', '-$100.00', 'Meal'], 
-    #                 ['Feb20', 'MCDONALDS', '$7.34', 'meal']]
-    
+    #[['01-Feb', 'Insurance', '-$100.00', 'Vehicle'], 
+    # ['01-Feb', 'McDonalds', '-$100.00', 'Meal'], 
+    # ['Feb10', 'gas', '-$60.00', 'Vehicle'], 
+    # ['28-Feb', 'ESSOSMARTSHOP', '$60.00']]
     for external in all_expenses:
         if (external[3].lower()) == type.lower():
             valid_expense.append(external)
@@ -29,9 +29,14 @@ def get_expense_by_type(type: str):
     return valid_expense
 
 @app.delete("/delete-expense")
-def delete_expense(cell_range: str, date: str, amount: int):
+def delete_expense(date: str = Path(title="in format of DD-Mon"), amount: int = Path(title="in format of $00.00")):
+    i = 2
     for expense in get_expenses.get_values():
-        print(null)
+        if (expense[0] == date) and (expense[3] == amount):
+            cell_range = "Sheet1!A" + str(i) + ":D" + str(i)
+            break
+        else:
+            i += 1
     return delete_expense.delete_expenses(cell_range)
 
 
