@@ -12,17 +12,16 @@ def get_values():
         service = build("sheets", "v4", credentials=creds)
         sheets = service.spreadsheets()
         
-        result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range="Sheet1!A2:D20").execute()
+        result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range="Sheet1!A2:D50").execute()
         
         values = result.get("values", [])
         expenses = []
 
         for row in values:
             expenses.append(row)
-        print(expenses)
         return expenses
+        
 
     except HttpError as error:
-        print(error)
         return None
-    
+

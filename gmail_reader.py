@@ -49,4 +49,6 @@ def fetch_email_data():
                         return date_store_amount_values
                 
 
+#[['28 Feb 2024', 'ESSOSMARTSTOP', '$60.00']]
+
                 

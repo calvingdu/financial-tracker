@@ -12,7 +12,6 @@ credential_handler.get_creds()
 @app.get("/get-expenses")
 def get_expense():
     return get_expenses.get_values()
-#return to user the data rather than returning null
 
 @app.get("/get-expense-by-type")
 def get_expense_by_type(type: str):
@@ -39,9 +38,22 @@ def delete_expense(date: str = Path(title="in format of DD-Mon"), amount: int = 
             i += 1
     return delete_expense.delete_expenses(cell_range)
 
+@app.post("/refresh")
+async def resync_new_emails():
+    current_list = get_expense()
+    new_emails =  gmail_reader.fetch_email_data()
+    unreceived_emails = []
+    for email in new_emails:
+        if not (email in current_list):
+            unreceived_emails.append(email)
+    return create_expense.create_expenses(unreceived_emails)
+
 
 @app.post("/create-expense")
 def create_new_expense(expense_type: str):
-    expense = gmail_reader.fetch_email_data().append(expense_type.lower())
+    expense = gmail_reader.fetch_email_data()
+    # expense[0].append("expense_type") ASK ASIM
+    # print(expense)
     return create_expense.create_expenses(expense)
+    
 
