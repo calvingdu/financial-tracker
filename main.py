@@ -4,6 +4,7 @@ import get_expenses
 import create_expense
 import gmail_reader
 import delete_expense
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -17,10 +18,6 @@ def get_expense():
 def get_expense_by_type(type: str):
     valid_expense = []
     all_expenses = get_expenses.get_values()
-    #[['01-Feb', 'Insurance', '-$100.00', 'Vehicle'], 
-    # ['01-Feb', 'McDonalds', '-$100.00', 'Meal'], 
-    # ['Feb10', 'gas', '-$60.00', 'Vehicle'], 
-    # ['28-Feb', 'ESSOSMARTSHOP', '$60.00']]
     for external in all_expenses:
         if (external[3].lower()) == type.lower():
             valid_expense.append(external)
@@ -53,7 +50,14 @@ async def resync_new_emails():
 def create_new_expense(expense_type: str):
     expense = gmail_reader.fetch_email_data()
     # expense[0].append("expense_type") ASK ASIM
-    # print(expense)
     return create_expense.create_expenses(expense)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
     
 

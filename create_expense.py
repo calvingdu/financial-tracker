@@ -8,7 +8,6 @@ def create_expenses(_values):
     SPREADSHEET_ID = "1rnYyBf3xr2Y8NCDSPtEJFGWfHBRcup00bumLbctTfkA"
     creds = credential_handler.get_creds()
     service = build("sheets", "v4", credentials=creds)
-    cell_range = "Sheet1!A6"
     values = _values
     current_values = get_expenses.get_values()
 
