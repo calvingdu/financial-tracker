@@ -1,33 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import DataMapper from './Json';
+    import React, { useEffect } from 'react';
+    import DataMapper from './Chart';
 
 
-const Expense = () => {
-    const [data, setData] = useState(null);
+    const Expense = ({data, setData}) => {
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+        useEffect(() => {
+            fetchData()
+                .then(data => setData(data)).catch(error => console.error("can't catch promise", error));
+        }, [setData]);
 
-    const fetchData = async () => {
+        return (
+            <div>
+                {data ? (
+                    <DataMapper jsonData={data} />
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </div>
+        );
+    };
+
+    export const fetchData = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/get-expenses'); // Assuming your React app is served from the same domain as FastAPI
+            const response = await fetch('http://127.0.0.1:8000/get-expenses');
             const responseData = await response.json();
-            setData(responseData);
+
+        return responseData;
         } catch (error) {
             console.error('Error fetching data:', error);
+            throw error;
         }
     };
 
-    return (
-        <div>
-            {data ? (
-                <DataMapper jsonData={data} />
-            ) : (
-                <p>Loading...</p>
-            )}
-        </div>
-    );
-};
 
-export default Expense;
+    export default Expense;

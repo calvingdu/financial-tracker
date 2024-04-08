@@ -1,6 +1,8 @@
 import React from 'react';
 
 const DataMapper = ({ jsonData }) => {
+    console.log('DataMapper jsonData:', jsonData);
+    
     return (
         <div>
             <table>

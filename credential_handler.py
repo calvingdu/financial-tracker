@@ -1,5 +1,9 @@
 import os.path
 import sys
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)  
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -21,12 +25,17 @@ def main():
         sys.exit(1)
 
 def get_creds():
+    print("checking for json file")
     if os.path.exists('token.json'):
+        print("loading json file")
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        print("creds loaded")
         if creds and creds.expired and creds.refresh_token:
+            print("refreshing")
             creds.refresh(Request())
+            print("refresh successful")
         return creds
 
-# main()
-
-    
+# if __name__ == "__main__":
+#     main()
+#I think running with this code debugs it. 
